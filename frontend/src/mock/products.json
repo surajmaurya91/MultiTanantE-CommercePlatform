@@ -1,0 +1,29 @@
+[
+  {
+    "_id": "p1",
+    "name": "Minimalist Chair",
+    "category": "Furniture",
+    "price": 79.99,
+    "image": "https://placehold.co/600x400?text=Chair",
+    "tenantId": "t1",
+    "description": "Comfortable and compact chair."
+  },
+  {
+    "_id": "p2",
+    "name": "Running Shoes",
+    "category": "Footwear",
+    "price": 59.99,
+    "image": "https://placehold.co/600x400?text=Shoes",
+    "tenantId": "t1",
+    "description": "Breathable running shoes."
+  },
+  {
+    "_id": "p3",
+    "name": "Coffee Mug",
+    "category": "Kitchen",
+    "price": 12.5,
+    "image": "https://placehold.co/600x400?text=Mug",
+    "tenantId": "t2",
+    "description": "Ceramic mug, 300ml."
+  }
+]
