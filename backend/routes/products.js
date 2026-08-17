@@ -44,4 +44,31 @@ router.post('/', auth, async (req, res) => {
   }
 })
 
+// PUT /api/products/:id (protected vendor)
+router.put('/:id', auth, async (req, res) => {
+  try {
+    if (!['vendor','admin','superadmin'].includes(req.user.role)) return res.status(403).json({ msg: 'Forbidden' })
+    const { name, category, price, image, description } = req.body
+    const product = await Product.findByIdAndUpdate(req.params.id, { name, category, price, image, description }, { new: true })
+    if (!product) return res.status(404).json({ msg: 'Not found' })
+    res.json(product)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ msg: 'Server error' })
+  }
+})
+
+// DELETE /api/products/:id (protected vendor)
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    if (!['vendor','admin','superadmin'].includes(req.user.role)) return res.status(403).json({ msg: 'Forbidden' })
+    const product = await Product.findByIdAndDelete(req.params.id)
+    if (!product) return res.status(404).json({ msg: 'Not found' })
+    res.json({ msg: 'Product deleted' })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ msg: 'Server error' })
+  }
+})
+
 module.exports = router
