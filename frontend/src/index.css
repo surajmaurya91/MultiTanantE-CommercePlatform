@@ -9,3 +9,203 @@ html, body, #root {
 body {
   @apply bg-gray-50 text-gray-800;
 }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  @apply bg-gray-50 text-gray-800;
+}
+
+/* ===== ANIMATIONS ===== */
+
+/* Blob animation for hero section */
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Pulse animation for badges */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Ping animation for auto-scroll indicator */
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ===== SCROLLBAR STYLES ===== */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* ===== SMOOTH SCROLLING ===== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== TRANSITIONS ===== */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* ===== BETTER TYPOGRAPHY ===== */
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== LOADING SKELETON ANIMATION ===== */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ===== IMAGE PLACEHOLDER STYLES ===== */
+.image-placeholder {
+  @apply bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center;
+}
+
+/* ===== CARD HOVER EFFECTS ===== */
+.card-hover {
+  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
+}
+
+/* ===== BUTTON STYLES ===== */
+.btn-primary {
+  @apply bg-amber-900 text-white font-light text-xs tracking-[0.15em] uppercase hover:bg-amber-800 transition-all duration-300 hover:shadow-xl rounded-lg;
+}
+
+.btn-secondary {
+  @apply bg-rose-700 text-white font-light text-xs tracking-[0.15em] uppercase hover:bg-amber-800 transition-all duration-300 hover:shadow-xl;
+}
+
+/* ===== SECTION TAGS ===== */
+.section-tag {
+  @apply text-[10px] tracking-[0.3em] uppercase text-amber-600 font-medium border-b border-amber-300 pb-1.5;
+}
+
+.section-heading {
+  @apply text-3xl sm:text-4xl font-light tracking-tight leading-[1.1] text-amber-950;
+}
+
+.section-subheading {
+  @apply text-amber-900/60 font-light text-sm;
+}
+
+/* ===== RESPONSIVE UTILITIES ===== */
+@screen sm {
+  .section-heading {
+    @apply text-4xl;
+  }
+}
+
+@screen lg {
+  .section-heading {
+    @apply text-5xl;
+  }
+}
+
+/* ===== GRADIENT TEXT ===== */
+.gradient-text-amber {
+  @apply bg-gradient-to-r from-amber-700 via-amber-600 to-orange-700 bg-clip-text text-transparent;
+}
+
+.gradient-text-rose {
+  @apply bg-gradient-to-r from-amber-700 via-rose-600 to-amber-700 bg-clip-text text-transparent;
+}
+
+/* ===== GLASSMORPHISM ===== */
+.glass {
+  @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-lg;
+}
+
+.glass-dark {
+  @apply bg-black/60 backdrop-blur-md border border-white/10 shadow-lg;
+}
+
+/* ===== AMBIENT GLOW ===== */
+.ambient-glow {
+  @apply absolute rounded-full blur-[140px] pointer-events-none;
+}
+
+.ambient-glow-amber {
+  @apply bg-amber-200/50;
+}
+
+.ambient-glow-orange {
+  @apply bg-orange-200/40;
+}
+
+.ambient-glow-rose {
+  @apply bg-rose-100/30;
+}
+
+/* ===== GRID PATTERN ===== */
+.grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(120, 53, 15, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(120, 53, 15, 0.03) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+}
+
+    @keyframes brandScroll {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-50%);
+      }
+    }

@@ -1,211 +1,358 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { AuthContext } from '../context/AuthContext'
-import client from '../api/apiClient'
+import React, { useEffect, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import client from "../api/apiClient";
 
-export default function ProductDetails() {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const { user } = useContext(AuthContext)
-  const [product, setProduct] = useState(null)
-  const [qty, setQty] = useState(1)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [addingToCart, setAddingToCart] = useState(false)
-  const [successMsg, setSuccessMsg] = useState('')
+// Import your local images
+import dressImg from "../image/dress.png";
+import dress1Img from "../image/dress1.png"; // ← ADD THIS
+import topImg from "../image/top.png";
+import trouserImg from "../image/trouser.png";
+import trouser1Img from "../image/trouser1.png";
+import anarkaliImg from "../image/anarkali.png";
+
+const ProductDetails = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
+  const [currentImage, setCurrentImage] = useState("");
+  const [addedToCart, setAddedToCart] = useState(false);
+
+  // Map product IDs to local images (fallback)
+  const localImages = {
+    "featured-dress-01": dressImg,
+    "featured-top-02": topImg,
+    "featured-trouser-03": trouserImg,
+    "featured-anarkali-04": anarkaliImg,
+  };
+
+  // Map backend image paths to local imports
+  const imagePathMap = {
+    "/images/dress.png": dressImg,
+    "/images/dress1.png": dress1Img, // ← ADD THIS
+    "/images/top.png": topImg,
+    "/images/trouser.png": trouserImg,
+    "/images/trouser1.png": trouser1Img,
+    "/images/anarkali.png": anarkaliImg,
+  };
 
   useEffect(() => {
-    const loadProduct = async () => {
+    const fetchProduct = async () => {
       try {
-        setLoading(true)
-        setError('')
-        
-        try {
-          // Try backend first
-          const res = await client.get(`/products/${id}`)
-          setProduct(res.data)
-        } catch (err) {
-          // Fallback to mock
-          const mockRes = await fetch('/src/mock/products.json')
-          const list = await mockRes.json()
-          const found = list.find(p => p._id === id)
-          if (!found) throw new Error('Product not found')
-          setProduct(found)
+        setLoading(true);
+        const res = await client.get(`/products/${id}`);
+        if (res.data) {
+          const productData = res.data;
+
+          // Set default image
+          let imageToShow = localImages[id] || dressImg;
+          if (productData.image && imagePathMap[productData.image]) {
+            imageToShow = imagePathMap[productData.image];
+          }
+
+          productData.image = imageToShow;
+          setCurrentImage(imageToShow);
+
+          // Handle colors with images
+          if (productData.metadata?.colors) {
+            const colors = productData.metadata.colors;
+            if (Array.isArray(colors) && colors.length > 0) {
+              const firstColor = colors[0];
+              if (typeof firstColor === "object" && firstColor.image) {
+                // Colors are objects with images
+                const colorImage = imagePathMap[firstColor.image] || dressImg;
+                setSelectedColor(firstColor.name);
+                setCurrentImage(colorImage);
+              } else {
+                setSelectedColor(colors[0]);
+              }
+            }
+          }
+
+          setProduct(productData);
         }
       } catch (err) {
-        console.error('Error loading product:', err)
-        setError('Product not found')
+        console.error("Error fetching product:", err);
+        setError("Product not found");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
+    };
+
+    if (id) {
+      fetchProduct();
+    }
+  }, [id]);
+
+  const handleColorChange = (color) => {
+    setSelectedColor(color);
+
+    // Handle object color with image
+    if (typeof color === "object" && color.image) {
+      const mappedImage = imagePathMap[color.image] || dressImg;
+      setCurrentImage(mappedImage);
+    }
+    // Fallback
+    else {
+      setCurrentImage(localImages[id] || dressImg);
+    }
+  };
+
+  const handleAddToCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const existing = cart.find((item) => item.productId === product._id);
+
+    const colorName =
+      typeof selectedColor === "object" ? selectedColor.name : selectedColor;
+
+    if (existing) {
+      existing.qty += quantity;
+    } else {
+      cart.push({
+        productId: product._id,
+        name: product.name,
+        price: product.price,
+        image: currentImage,
+        qty: quantity,
+        size: selectedSize || "N/A",
+        color: colorName || "N/A",
+      });
     }
 
-    loadProduct()
-  }, [id])
-
-  const handleAddToCart = async () => {
-    if (!user) {
-      navigate('/login')
-      return
-    }
-
-    try {
-      setAddingToCart(true)
-      setError('')
-
-      // Get cart from localStorage
-      const cart = JSON.parse(localStorage.getItem('cart') || '[]')
-      
-      // Check if product already in cart
-      const existingItem = cart.find(item => item.productId === product._id)
-      if (existingItem) {
-        existingItem.qty += qty
-      } else {
-        cart.push({
-          productId: product._id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          qty
-        })
-      }
-
-      localStorage.setItem('cart', JSON.stringify(cart))
-      setSuccessMsg(`Added ${qty} ${product.name}(s) to cart!`)
-      setQty(1)
-      
-      setTimeout(() => {
-        setSuccessMsg('')
-      }, 3000)
-    } catch (err) {
-      setError('Failed to add to cart')
-    } finally {
-      setAddingToCart(false)
-    }
-  }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 3000);
+  };
 
   if (loading) {
     return (
-      <div className="container mx-auto py-12 text-center">
-        <p className="text-gray-600 text-lg">Loading product...</p>
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-6 h-6 border-2 border-amber-800 border-t-transparent rounded-full animate-spin mx-auto mb-1"></div>
+          <p className="text-amber-800 text-xs font-light">Loading...</p>
+        </div>
       </div>
-    )
+    );
   }
 
   if (error || !product) {
     return (
-      <div className="container mx-auto py-12 text-center">
-        <p className="text-red-600 text-lg mb-4">{error || 'Product not found'}</p>
-        <button 
-          onClick={() => navigate('/products')}
-          className="text-indigo-600 hover:text-indigo-700 font-semibold"
-        >
-          ← Back to Products
-        </button>
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-lg font-light text-amber-950 mb-1">
+            Product Not Found
+          </h2>
+          <Link
+            to="/women-fashion"
+            className="text-amber-800 text-xs hover:underline"
+          >
+            ← Back to Women's Fashion
+          </Link>
+        </div>
       </div>
-    )
+    );
   }
 
+  const sizes = product.metadata?.sizes || ["S", "M", "L", "XL"];
+  const colors = product.metadata?.colors || ["Black", "White", "Navy"];
+  const badge = product.metadata?.badge || "";
+  const brand = product.metadata?.brand || "";
+  const material = product.metadata?.material || "";
+  const rating = product.metadata?.rating || 4.5;
+  const reviews = product.metadata?.reviews || 0;
+
+  const displayImage = currentImage || product.image || dressImg;
+
   return (
-    <div className="container mx-auto py-8">
-      <button 
-        onClick={() => navigate('/products')}
-        className="text-indigo-600 hover:text-indigo-700 font-semibold mb-6"
-      >
-        ← Back to Products
-      </button>
+    <div className="min-h-screen bg-[#FDFBF7] py-4">
+      <div className="container mx-auto px-4 max-w-5xl">
+        {/* Success Message */}
+        {addedToCart && (
+          <div className="mb-3 bg-emerald-50 border border-emerald-200 text-emerald-700 px-2.5 py-1.5 rounded text-[10px]">
+            ✓ Added to cart!
+          </div>
+        )}
 
-      <div className="grid md:grid-cols-2 gap-8">
-        {/* Product Image */}
-        <div>
-          <img 
-            src={product.image} 
-            alt={product.name} 
-            className="w-full object-cover rounded-lg shadow-lg"
-          />
-        </div>
-
-        {/* Product Info */}
-        <div className="flex flex-col justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* LEFT - Product Image */}
           <div>
-            <span className="text-sm text-indigo-600 font-semibold">{product.category}</span>
-            <h1 className="text-4xl font-bold mt-2">{product.name}</h1>
-            
-            <div className="mt-6">
-              <div className="text-4xl font-bold text-indigo-600">${product.price.toFixed(2)}</div>
+            <div className="relative bg-stone-100 rounded-lg overflow-hidden aspect-[3/4] max-h-[520px]">
+              <img
+                src={displayImage}
+                alt={product.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Fallback if image fails to load
+                  e.target.src = trouserImg;
+                }}
+              />
+              {badge && (
+                <span className="absolute top-2 left-2 bg-stone-900/90 text-amber-100 text-[10px] px-2 py-0.5 rounded-full">
+                  {badge}
+                </span>
+              )}
             </div>
-
-            <p className="text-gray-600 text-lg mt-6 leading-relaxed">
-              {product.description}
-            </p>
-
-            {product.metadata && (
-              <div className="mt-6 bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600">
-                  <strong>Store ID:</strong> {product.tenantId}
-                </p>
-              </div>
-            )}
           </div>
 
-          {/* Add to Cart Section */}
-          <div className="mt-8 space-y-4">
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                {error}
+          {/* RIGHT - Product Details */}
+          <div className="space-y-2.5">
+            {brand && (
+              <span className="text-[16px] tracking-widest uppercase text-slate-400 font-medium">
+                {brand}
+              </span>
+            )}
+
+            <h1 className="text-xl font-light text-amber-950 leading-tight">
+              {product.name}
+            </h1>
+
+            <div className="flex items-center gap-2 text-[14px]">
+              <div className="flex items-center gap-0.5">
+                <span className="text-amber-500 text-[14px]">★</span>
+                <span className="font-medium text-slate-700">{rating}</span>
+                <span className="text-slate-400">({reviews})</span>
+              </div>
+              <span className="text-emerald-600 font-medium text-[14px]">
+                ✓ In Stock
+              </span>
+            </div>
+
+            <div className="text-xl font-light text-amber-950">
+              ${product.price?.toFixed(2)}
+            </div>
+
+            <p className="text-slate-600 font-light text-xl leading-relaxed">
+              {product.description || "Beautiful piece from our collection."}
+            </p>
+
+            {material && (
+              <div className="text-[14px]">
+                <span className="text-slate-400">Material: </span>
+                <span className="text-slate-700 font-medium">{material}</span>
               </div>
             )}
 
-            {successMsg && (
-              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
-                ✓ {successMsg}
+            {/* Size Selector */}
+            <div>
+              <span className="text-[14px] uppercase tracking-widest text-slate-600 font-medium block mb-1">
+                Select Size
+              </span>
+              <div className="flex flex-wrap gap-1">
+                {sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-3 py-0.5 border rounded text-[14px] transition ${
+                      selectedSize === size
+                        ? "border-amber-800 bg-amber-800 text-white"
+                        : "border-slate-200 text-slate-600 hover:border-amber-800"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
 
-            <div className="flex items-center gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
-                <input 
-                  type="number"
-                  min="1"
-                  max="100"
-                  value={qty}
-                  onChange={e => setQty(Math.max(1, parseInt(e.target.value)))}
-                  className="w-20 border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                />
+            {/* Color Selector */}
+            <div>
+              <span className="text-[14px] uppercase tracking-widest text-slate-600 font-medium block mb-1">
+                Select Color
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {colors.map((color) => {
+                  const colorName =
+                    typeof color === "object" ? color.name : color;
+                  const isSelected =
+                    selectedColor === color ||
+                    (typeof selectedColor === "object" &&
+                      selectedColor.name === colorName);
+
+                  return (
+                    <button
+                      key={colorName}
+                      onClick={() => handleColorChange(color)}
+                      className={`px-2.5 py-0.5 border rounded text-[14px] transition ${
+                        isSelected
+                          ? "border-amber-800 bg-amber-50 text-amber-800"
+                          : "border-slate-200 text-slate-600 hover:border-amber-800"
+                      }`}
+                    >
+                      {colorName}
+                    </button>
+                  );
+                })}
               </div>
-              <div>
-                <button 
-                  onClick={handleAddToCart}
-                  disabled={addingToCart || !user}
-                  className="mt-6 px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 disabled:bg-gray-400 transition"
+            </div>
+
+            {/* Quantity */}
+            <div>
+              <span className="text-[14px] uppercase tracking-widest text-slate-600 font-medium block mb-1">
+                Quantity
+              </span>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="w-6 h-6 border rounded flex items-center justify-center hover:border-amber-800 text-md"
                 >
-                  {addingToCart ? 'Adding...' : '🛒 Add to Cart'}
+                  −
+                </button>
+                <span className="w-6 text-center text-xs font-medium">
+                  {quantity}
+                </span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="w-6 h-6 border rounded flex items-center justify-center hover:border-amber-800 text-md"
+                >
+                  +
                 </button>
               </div>
             </div>
 
-            {!user && (
-              <p className="text-sm text-gray-600">
-                <button 
-                  onClick={() => navigate('/login')}
-                  className="text-indigo-600 hover:text-indigo-700 font-semibold"
-                >
-                  Sign in
-                </button>
-                {' '}to add items to cart
-              </p>
-            )}
+            <div className="flex flex-col sm:flex-row gap-1.5 pt-1">
+              <button
+                onClick={handleAddToCart}
+                className="flex-1 bg-amber-700 text-white px-4 py-2 rounded-full hover:bg-amber-800 transition text-[14px] uppercase tracking-wider"
+              >
+                🛍️ Add to Bag
+              </button>
+              <button
+                onClick={() => navigate(-1)}
+                className="px-4 py-2 border border-slate-200 rounded-full hover:border-amber-800 hover:text-amber-800 transition text-[14px]"
+              >
+                ← Continue
+              </button>
+            </div>
 
-            <button 
-              onClick={() => navigate('/cart')}
-              className="w-full px-6 py-3 border-2 border-indigo-600 text-indigo-600 rounded-lg font-semibold hover:bg-indigo-50 transition"
-            >
-              🛍️ View Cart
-            </button>
+            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
+              <div className="text-center">
+                <p className="text-base mb-0">🚚</p>
+                <p className="text-[12px] text-slate-400 uppercase tracking-wider">
+                  Free Shipping
+                </p>
+              </div>
+              <div className="text-center">
+                <p className="text-base mb-0">🔄</p>
+                <p className="text-[12px] text-slate-400 uppercase tracking-wider">
+                  30-Day Returns
+                </p>
+              </div>
+              <div className="text-center">
+                <p className="text-base mb-0">🔒</p>
+                <p className="text-[12px] text-slate-400 uppercase tracking-wider">
+                  Secure Payment
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default ProductDetails;

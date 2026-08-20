@@ -37,27 +37,27 @@ const seedDB = async () => {
     })
     console.log('✅ Super Admin created:', superAdmin.email)
 
-    // Create Vendor 1
+    // Create Vendor 1 - Fashion Vendor
     const hashedVendor1Password = await bcrypt.hash('vendor123', 10)
     const vendor1 = await User.create({
-      name: 'Vendor One',
-      email: 'vendor1@store.com',
+      name: 'Fashion Vendor',
+      email: 'fashion@store.com',
       password: hashedVendor1Password,
       role: 'vendor',
       tenantId: 'store_001'
     })
-    console.log('✅ Vendor 1 created:', vendor1.email)
+    console.log('✅ Vendor 1 (Fashion) created:', vendor1.email)
 
-    // Create Vendor 2
+    // Create Vendor 2 - Electronics Vendor
     const hashedVendor2Password = await bcrypt.hash('vendor123', 10)
     const vendor2 = await User.create({
-      name: 'Vendor Two',
-      email: 'vendor2@store.com',
+      name: 'Electronics Vendor',
+      email: 'electronics@store.com',
       password: hashedVendor2Password,
       role: 'vendor',
       tenantId: 'store_002'
     })
-    console.log('✅ Vendor 2 created:', vendor2.email)
+    console.log('✅ Vendor 2 (Electronics) created:', vendor2.email)
 
     // Create Customer
     const hashedCustomerPassword = await bcrypt.hash('customer123', 10)
@@ -72,85 +72,274 @@ const seedDB = async () => {
 
     // Create Stores
     const store1 = await Store.create({
-      name: 'Electronics Hub',
+      name: 'Fashion Central',
       ownerId: vendor1._id,
       tenantId: 'store_001',
-      metadata: { description: 'Premium electronics and gadgets' }
+      metadata: {
+        description: 'Latest fashion and apparel'
+      }
     })
-    console.log('✅ Store 1 created:', store1.name)
+    console.log('✅ Store 1 (Fashion) created:', store1.name)
 
     const store2 = await Store.create({
-      name: 'Fashion Central',
+      name: 'Electronics Hub',
       ownerId: vendor2._id,
       tenantId: 'store_002',
-      metadata: { description: 'Latest fashion and apparel' }
+      metadata: {
+        description: 'Premium electronics and gadgets'
+      }
     })
-    console.log('✅ Store 2 created:', store2.name)
+    console.log('✅ Store 2 (Electronics) created:', store2.name)
 
-    // Create Products for Store 1
-    const products1 = await Product.create([
+    // ============================================================
+    // WOMEN'S FASHION PRODUCTS - USING PLACEHOLDER IMAGES
+    // The frontend will replace these with local images
+    // ============================================================
+    const womenFashion = await Product.create([{
+        _id: 'featured-dress-01',
+        name: 'Off-Shoulder Silk Evening Gown',
+        category: 'Dresses',
+        price: 450,
+        image: '/images/dress.png', // Frontend will map this
+        description: 'Sculpted drape bodice with an asymmetric train. Crafted from pure silk with hand-embroidered details.',
+        tenantId: 'store_001',
+        metadata: {
+        badge: 'Couture',
+        sizes: ['XS', 'S', 'M', 'L', 'XL'],
+          colors: [{
+              name: 'Black',
+              image: '/images/dress.png'
+            },
+            {
+              name: 'Red',
+              image: '/images/dress1.png'
+            }
+          ],
+          rating: 4.8,
+          reviews: 124,
+          brand: 'Maison Luxe',
+          material: '100% Silk',
+          care: 'Dry clean only'
+        }
+      },
       {
-        name: 'Wireless Headphones',
+        _id: 'featured-top-02',
+        name: 'Draped Mesh Wrap Top',
+        category: 'Tops',
+        price: 180,
+        image: '/images/top.png',
+        description: 'Sheer pleated overlay in rich wine hue. Perfect for evening occasions.',
+        tenantId: 'store_001',
+        metadata: {
+          badge: 'Trending',
+          sizes: ['XS', 'S', 'M', 'L'],
+          colors: ['Wine', 'Black', 'Emerald'],
+          rating: 4.6,
+          reviews: 89,
+          brand: 'Studio Noir',
+          material: 'Premium Mesh',
+          care: 'Hand wash recommended'
+        }
+      },
+      {
+        _id: 'featured-trouser-03',
+        name: 'Pleated Wide-Leg Trousers',
+        category: 'Trousers',
+        price: 220,
+        image: '/images/trouser.png', // ← This gets mapped to trouserImg
+        description: 'High-waisted silhouette in mocha wool blend. Effortless elegance for the modern woman.',
+        tenantId: 'store_001',
+        metadata: {
+          badge: 'Tailored',
+          sizes: ['XS', 'S', 'M', 'L', 'XL'],
+          colors: [{
+              name: 'Coffee Brown',
+              image: '/images/trouser.png'
+            },
+            {
+              name: 'Beige',
+              image: '/images/trouser1.png'
+            }
+          ],
+          rating: 4.7,
+          reviews: 67,
+          brand: 'Tailored Threads',
+          material: 'Wool Blend',
+          care: 'Dry clean only'
+        }
+      },
+      {
+        _id: 'featured-anarkali-04',
+        name: 'Printed Silk Anarkali Set',
+        category: 'Ethnic',
+        price: 320,
+        image: '/images/anarkali.png',
+        description: 'Floral block print paired with sheer dupatta. A celebration of timeless Indian craftsmanship.',
+        tenantId: 'store_001',
+        metadata: {
+          badge: 'Heritage',
+          sizes: ['S', 'M', 'L', 'XL'],
+          colors: ['Rose', 'Teal', 'Gold'],
+          rating: 4.9,
+          reviews: 203,
+          brand: 'Heritage Weaves',
+          material: 'Pure Silk',
+          care: 'Dry clean only'
+        }
+      }
+    ])
+    console.log(`✅ Women's Fashion: ${womenFashion.length} products`)
+
+    // ============================================================
+    // ELECTRONICS PRODUCTS
+    // ============================================================
+    const electronics = await Product.create([{
+        _id: 'elec-01',
+        name: 'Wireless Headphones Pro',
         category: 'Electronics',
-        price: 79.99,
-        image: 'https://via.placeholder.com/300x200?text=Wireless+Headphones',
-        description: 'High-quality wireless headphones with noise cancellation',
-        tenantId: 'store_001'
+        price: 199.99,
+        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=600&fit=crop',
+        description: 'Premium wireless headphones with active noise cancellation.',
+        tenantId: 'store_002',
+        metadata: {
+          badge: 'Best Seller',
+          rating: 4.8,
+          reviews: 450,
+          brand: 'AudioTech'
+        }
       },
       {
-        name: 'USB-C Cable',
-        category: 'Accessories',
-        price: 12.99,
-        image: 'https://via.placeholder.com/300x200?text=USB-C+Cable',
-        description: 'Durable USB-C charging cable',
-        tenantId: 'store_001'
+        _id: 'elec-02',
+        name: 'Smart Watch Series 8',
+        category: 'Electronics',
+        price: 349.99,
+        image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&h=600&fit=crop',
+        description: 'Advanced health tracking with ECG and blood oxygen monitoring.',
+        tenantId: 'store_002',
+        metadata: {
+          badge: 'New',
+          rating: 4.7,
+          reviews: 320,
+          brand: 'TechWear'
+        }
       },
       {
-        name: 'Phone Stand',
+        _id: 'elec-03',
+        name: 'USB-C Fast Charger',
         category: 'Accessories',
-        price: 15.99,
-        image: 'https://via.placeholder.com/300x200?text=Phone+Stand',
-        description: 'Adjustable phone stand for desk',
-        tenantId: 'store_001'
+        price: 29.99,
+        image: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=600&h=600&fit=crop',
+        description: '65W GaN fast charger with 2 USB-C ports.',
+        tenantId: 'store_002',
+        metadata: {
+          badge: 'Essential',
+          rating: 4.5,
+          reviews: 180,
+          brand: 'ChargePro'
+        }
       }
     ])
-    console.log('✅ Store 1 products created:', products1.length)
+    console.log(`✅ Electronics: ${electronics.length} products`)
 
-    // Create Products for Store 2
-    const products2 = await Product.create([
-      {
-        name: 'Cotton T-Shirt',
-        category: 'Clothing',
-        price: 24.99,
-        image: 'https://via.placeholder.com/300x200?text=Cotton+T-Shirt',
-        description: 'Comfortable 100% cotton t-shirt',
-        tenantId: 'store_002'
+    // ============================================================
+    // MEN'S FASHION PRODUCTS
+    // ============================================================
+    const menFashion = await Product.create([{
+        _id: 'men-suit-01',
+        name: 'Tailored Wool Suit',
+        category: 'Suits',
+        price: 599,
+        image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=800&fit=crop',
+        description: 'Sharp tailored wool suit with a modern slim fit silhouette.',
+        tenantId: 'store_001',
+        metadata: {
+          badge: 'Couture',
+          sizes: ['38R', '40R', '42R', '44R', '46R'],
+          colors: ['Navy', 'Charcoal', 'Black'],
+          rating: 4.9,
+          reviews: 156,
+          brand: 'Savile Row',
+          material: 'Pure Wool',
+          care: 'Dry clean only'
+        }
       },
       {
-        name: 'Blue Jeans',
-        category: 'Clothing',
-        price: 54.99,
-        image: 'https://via.placeholder.com/300x200?text=Blue+Jeans',
-        description: 'Premium denim jeans',
-        tenantId: 'store_002'
+        _id: 'men-jacket-02',
+        name: 'Leather Biker Jacket',
+        category: 'Jackets',
+        price: 349,
+        image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&h=800&fit=crop',
+        description: 'Premium leather biker jacket with classic hardware details.',
+        tenantId: 'store_001',
+        metadata: {
+          badge: 'Trending',
+          sizes: ['S', 'M', 'L', 'XL'],
+          colors: ['Black', 'Brown'],
+          rating: 4.7,
+          reviews: 89,
+          brand: 'Heritage Leather',
+          material: 'Genuine Leather',
+          care: 'Leather care required'
+        }
       },
       {
-        name: 'Leather Belt',
-        category: 'Accessories',
-        price: 34.99,
-        image: 'https://via.placeholder.com/300x200?text=Leather+Belt',
-        description: 'Classic leather belt',
-        tenantId: 'store_002'
+        _id: 'men-shirt-03',
+        name: 'Italian Linen Shirt',
+        category: 'Shirts',
+        price: 149,
+        image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&h=800&fit=crop',
+        description: 'Breathable Italian linen shirt for timeless elegance.',
+        tenantId: 'store_001',
+        metadata: {
+          badge: 'Essential',
+          sizes: ['S', 'M', 'L', 'XL'],
+          colors: ['White', 'Blue', 'Beige'],
+          rating: 4.6,
+          reviews: 67,
+          brand: 'Linen Luxe',
+          material: '100% Linen',
+          care: 'Machine wash cold'
+        }
+      },
+      {
+        _id: 'men-watch-04',
+        name: 'Automatic Dress Watch',
+        category: 'Watches',
+        price: 799,
+        image: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&h=800&fit=crop',
+        description: 'Swiss automatic movement with a classic leather strap.',
+        tenantId: 'store_001',
+        metadata: {
+          badge: 'Heritage',
+          sizes: ['One Size'],
+          colors: ['Gold', 'Silver', 'Rose Gold'],
+          rating: 4.9,
+          reviews: 203,
+          brand: 'Horology Swiss',
+          material: 'Stainless Steel',
+          care: 'Wipe clean'
+        }
       }
     ])
-    console.log('✅ Store 2 products created:', products2.length)
+    console.log(`✅ Men's Fashion: ${menFashion.length} products`)
 
     console.log('\n✨ Database seeded successfully!')
+    console.log('\n📊 Products Summary:')
+    console.log(`   👗 Women\'s Fashion: ${womenFashion.length}`)
+    console.log(`   👔 Men\'s Fashion: ${menFashion.length}`)
+    console.log(`   📱 Electronics: ${electronics.length}`)
+    console.log(`   📦 Total: ${womenFashion.length + menFashion.length + electronics.length} products`)
+
     console.log('\n📋 Test Credentials:')
     console.log('   Super Admin: admin@multitenant.com / admin123')
-    console.log('   Vendor 1: vendor1@store.com / vendor123')
-    console.log('   Vendor 2: vendor2@store.com / vendor123')
+    console.log('   Fashion Vendor: fashion@store.com / vendor123')
+    console.log('   Electronics Vendor: electronics@store.com / vendor123')
     console.log('   Customer: customer@example.com / customer123')
+
+    console.log('\n🔗 Product IDs:')
+    womenFashion.forEach(p => console.log(`   ${p._id}`))
+    menFashion.forEach(p => console.log(`   ${p._id}`))
+    electronics.forEach(p => console.log(`   ${p._id}`))
 
     process.exit(0)
   } catch (err) {

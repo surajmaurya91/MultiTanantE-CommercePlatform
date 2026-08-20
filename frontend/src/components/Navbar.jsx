@@ -17,6 +17,8 @@ export default function Navbar() {
         <div className="flex items-center gap-6">
           <Link to="/" className="font-bold text-xl text-indigo-600">🏪 MultiStore</Link>
           <Link to="/products" className="text-gray-700 hover:text-indigo-600 font-medium">Products</Link>
+          <Link to="/about" className="text-gray-700 hover:text-indigo-600 font-medium">About</Link>
+          <Link to="/electronics" className="text-gray-700 hover:text-indigo-600 font-medium">Electronics</Link>
         </div>
         
         <div className="flex items-center gap-4">

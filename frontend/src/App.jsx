@@ -9,6 +9,9 @@ import VendorDashboard from './pages/VendorDashboard'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import SuperAdmin from './pages/SuperAdmin'
+import WomenFashionPage from './pages/WomenFashionPage';
+import About from "./pages/About";
+import Electronics from './pages/Electronics'
 
 export default function App() {
   return (
@@ -18,12 +21,15 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<ProductList />} />
-          <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/vendor" element={<VendorDashboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<SuperAdmin />} />
+          <Route path="/WomenFashionPage" element={<WomenFashionPage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/electronics" element={<Electronics />} />
         </Routes>
       </main>
     </div>
