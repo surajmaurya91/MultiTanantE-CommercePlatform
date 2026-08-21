@@ -25,7 +25,7 @@ const HeroSection = () => {
       name: "Watches",
       badge: "Timeless",
       image: watch,
-      link: "/products?category=watches",
+      link: "/WatchesPage",
       icon: "⌚"
     },
     {
@@ -33,7 +33,7 @@ const HeroSection = () => {
       name: "Bags",
       badge: "Essential",
       image: bags,
-      link: "/products?category=bags",
+      link: "/BagsPage",
       icon: "👜"
     },
     {
@@ -41,7 +41,7 @@ const HeroSection = () => {
       name: "Jewelry",
       badge: "Adorn",
       image: jewelry,
-      link: "/products?category=jewelry",
+      link: "/JewelryPage",
       icon: "💎"
     },
     {
@@ -49,7 +49,7 @@ const HeroSection = () => {
       name: "Sunglasses",
       badge: "Iconic",
       image: sunglasses,
-      link: "/products?category=sunglasses",
+      link: "/SunglassesPage",
       icon: "🕶️"
     },
     {
@@ -57,7 +57,7 @@ const HeroSection = () => {
       name: "Footwear",
       badge: "Step Up",
       image: footwear,
-      link: "/products?category=footwear",
+      link: "/FootwearPage",
       icon: "👞"
     }
   ];
@@ -85,16 +85,15 @@ const HeroSection = () => {
     // Start auto-scroll - FASTER SPEED
     autoScrollInterval.current = setInterval(() => {
       if (container) {
-        const scrollAmount = 2.5; // Increased from 1 to 2.5 for faster scrolling
+        const scrollAmount = 2.5;
         container.scrollLeft += scrollAmount;
         
-        // Reset to beginning when reaching the end of duplicated content
         const totalWidth = container.scrollWidth / 3;
         if (container.scrollLeft >= totalWidth * 2) {
           container.scrollLeft = 0;
         }
       }
-    }, 20); // Reduced from 30ms to 20ms for smoother, faster animation
+    }, 20);
 
     // Pause on hover
     const handleMouseEnter = () => {
@@ -104,14 +103,14 @@ const HeroSection = () => {
     const handleMouseLeave = () => {
       autoScrollInterval.current = setInterval(() => {
         if (container) {
-          const scrollAmount = 2.5; // Increased from 1 to 2.5 for faster scrolling
+          const scrollAmount = 2.5;
           container.scrollLeft += scrollAmount;
           const totalWidth = container.scrollWidth / 3;
           if (container.scrollLeft >= totalWidth * 2) {
             container.scrollLeft = 0;
           }
         }
-      }, 20); // Reduced from 30ms to 20ms for smoother, faster animation
+      }, 20);
     };
 
     container.addEventListener('mouseenter', handleMouseEnter);
@@ -126,7 +125,9 @@ const HeroSection = () => {
 
   return (
     <>
-      {/* ORIGINAL HERO SECTION */}
+      {/* ============================================================ */}
+      {/* HERO SECTION */}
+      {/* ============================================================ */}
       <section className="relative min-h-screen bg-[#FAF7F2] text-amber-950 overflow-hidden flex items-center justify-center py-20">
         {/* Warm Ambient Glows */}
         <div className="absolute -top-24 -left-24 w-[600px] h-[600px] bg-amber-200/50 rounded-full blur-[140px] pointer-events-none" />
@@ -175,99 +176,84 @@ const HeroSection = () => {
 
             <div className="lg:col-span-7 relative h-[480px] sm:h-[550px] w-full flex items-center justify-center">
               <div className="absolute w-56 sm:w-72 h-80 sm:h-96 rounded-3xl overflow-hidden border border-orange-300/25 shadow-[0_25px_60px_rgba(0,0,0,0.75)] transform -rotate-3 hover:rotate-0 transition-transform duration-500 z-10">
-                <img
-                  src={pic5}
-                  alt="Crafting"
-                  className="w-full h-full object-cover"
-                />
+                <img src={pic5} alt="Crafting" className="w-full h-full object-cover" />
               </div>
               <div className="absolute -top-4 left-4 sm:left-12 w-40 sm:w-52 h-48 sm:h-60 rounded-2xl overflow-hidden border border-orange-300/20 shadow-[0_20px_45px_rgba(0,0,0,0.65)] transform -rotate-12 hover:-rotate-6 transition-transform duration-500 z-20">
-                <img
-                  src={pic1}
-                  alt="Haute Couture"
-                  className="w-full h-full object-cover"
-                />
+                <img src={pic1} alt="Haute Couture" className="w-full h-full object-cover" />
               </div>
               <div className="absolute -bottom-4 left-8 sm:left-20 w-36 sm:w-48 h-44 sm:h-56 rounded-2xl overflow-hidden border border-orange-300/20 shadow-[0_20px_45px_rgba(0,0,0,0.65)] transform rotate-6 hover:rotate-0 transition-transform duration-500 z-30">
-                <img
-                  src={pic2}
-                  alt="Fashion"
-                  className="w-full h-full object-cover"
-                />
+                <img src={pic2} alt="Fashion" className="w-full h-full object-cover" />
               </div>
               <div className="absolute top-2 right-4 sm:right-12 w-40 sm:w-52 h-48 sm:h-60 rounded-2xl overflow-hidden border border-orange-300/20 shadow-[0_20px_45px_rgba(0,0,0,0.65)] transform rotate-12 hover:rotate-6 transition-transform duration-500 z-20">
-                <img
-                  src={pic3}
-                  alt="Menswear"
-                  className="w-full h-full object-cover"
-                />
+                <img src={pic3} alt="Menswear" className="w-full h-full object-cover" />
               </div>
               <div className="absolute bottom-2 right-8 sm:right-20 w-36 sm:w-48 h-44 sm:h-56 rounded-2xl overflow-hidden border border-orange-300/20 shadow-[0_20px_45px_rgba(0,0,0,0.65)] transform -rotate-6 hover:rotate-0 transition-transform duration-500 z-30">
-                <img
-                  src={pic4}
-                  alt="Watch"
-                  className="w-full h-full object-cover"
-                />
+                <img src={pic4} alt="Watch" className="w-full h-full object-cover" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* ============================================================ */}
+      {/* WOMEN'S FASHION SECTION */}
+      {/* ============================================================ */}
       <section className="relative py-12 bg-white overflow-hidden">
-  <div className="container mx-auto px-6 max-w-7xl">
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-      {/* Left - Image */}
-      <div className="relative order-2 lg:order-1">
-        <div className="relative overflow-hidden rounded-lg shadow-xl">
-          <img
-            src={pic6}
-            alt="Women's Fashion Collection"
-            className="w-full h-[300px] sm:h-[380px] lg:h-[420px] object-cover transition-transform duration-700 hover:scale-105"
-          />
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            {/* Left - Image */}
+            <div className="relative order-2 lg:order-1">
+              <div className="relative overflow-hidden rounded-lg shadow-xl">
+                <img
+                  src={pic6}
+                  alt="Women's Fashion Collection"
+                  className="w-full h-[300px] sm:h-[380px] lg:h-[420px] object-cover transition-transform duration-700 hover:scale-105"
+                />
+              </div>
+            </div>
+
+            {/* Right - Content */}
+            <div className="order-1 lg:order-2 space-y-4 text-center lg:text-left">
+              {/* Tag */}
+              <div className="inline-block">
+                <span className="text-[10px] tracking-[0.3em] uppercase text-amber-600 font-medium border-b border-amber-300 pb-1.5">
+                  Women's Collection
+                </span>
+              </div>
+
+              {/* Heading */}
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight leading-[1.1] text-amber-950">
+                They've <br />
+                <span className="font-serif italic font-normal text-rose-700">
+                  Landed!
+                </span>
+              </h2>
+
+              {/* Description */}
+              <p className="text-amber-900/70 font-light leading-relaxed text-sm sm:text-base max-w-lg mx-auto lg:mx-0">
+                The Autumn/Winter 2026 collection brings together handcrafted
+                silhouettes, premium fabrics, and sustainable artistry. Each
+                piece is a celebration of timeless elegance — from flowing silks
+                to structured tailoring.
+              </p>
+
+              {/* Shop Now Button */}
+              <div className="pt-2">
+                <Link
+                  to="/WomenFashionPage"
+                  className="inline-block px-8 py-3 bg-rose-700 text-white font-light text-xs tracking-[0.15em] uppercase hover:bg-amber-800 transition-all duration-300 hover:shadow-xl"
+                >
+                  Shop Now →
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Right - Content */}
-      <div className="order-1 lg:order-2 space-y-4 text-center lg:text-left">
-        {/* Tag */}
-        <div className="inline-block">
-          <span className="text-[10px] tracking-[0.3em] uppercase text-amber-600 font-medium border-b border-amber-300 pb-1.5">
-            Women's Collection
-          </span>
-        </div>
-
-        {/* Heading */}
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight leading-[1.1] text-amber-950">
-          They've <br />
-          <span className="font-serif italic font-normal text-rose-700">
-            Landed!
-          </span>
-        </h2>
-
-        {/* Description */}
-        <p className="text-amber-900/70 font-light leading-relaxed text-sm sm:text-base max-w-lg mx-auto lg:mx-0">
-          The Autumn/Winter 2026 collection brings together handcrafted
-          silhouettes, premium fabrics, and sustainable artistry. Each
-          piece is a celebration of timeless elegance — from flowing silks
-          to structured tailoring.
-        </p>
-
-        {/* Shop Now Button - Links to WomenFashionPage */}
-        <div className="pt-2">
-          <Link
-            to="/WomenFashionPage"
-            className="inline-block px-8 py-3 bg-rose-700 text-white font-light text-xs tracking-[0.15em] uppercase hover:bg-amber-800 transition-all duration-300 hover:shadow-xl"
-          >
-            Shop Now →
-          </Link>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
+      {/* ============================================================ */}
       {/* MEN'S FASHION SECTION */}
+      {/* ============================================================ */}
       <section className="relative py-12 bg-white overflow-hidden">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
@@ -308,7 +294,7 @@ const HeroSection = () => {
               {/* Shop Now Button */}
               <div className="pt-2">
                 <Link
-                  to="/products?category=men"
+                  to="/MenFashionPage"
                   className="inline-block px-8 py-3 bg-blue-800 text-white font-light text-xs tracking-[0.15em] uppercase hover:bg-amber-800 transition-all duration-300 hover:shadow-xl"
                 >
                   Shop Now →
@@ -319,60 +305,63 @@ const HeroSection = () => {
         </div>
       </section>
 
-      {/* LUXURY ELECTRONICS - OPTION 2: SPLIT LAYOUT */}
-<section className="relative py-16 bg-white overflow-hidden">
-  <div className="container mx-auto px-6 max-w-7xl">
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-      
-      {/* Left - Image */}
-      <div className="relative order-1 lg:order-1">
-        <div className="relative overflow-hidden rounded-2xl shadow-2xl">
-          <img 
-            src={pic8} 
-            alt="Luxury Electronics" 
-            className="w-full h-[300px] sm:h-[400px] lg:h-[450px] object-cover object-center transition-transform duration-700 hover:scale-105"
-          />
-          
+      {/* ============================================================ */}
+      {/* LUXURY ELECTRONICS SECTION */}
+      {/* ============================================================ */}
+      <section className="relative py-16 bg-white overflow-hidden">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Left - Image */}
+            <div className="relative order-1 lg:order-1">
+              <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+                <img 
+                  src={pic8} 
+                  alt="Luxury Electronics" 
+                  className="w-full h-[300px] sm:h-[400px] lg:h-[450px] object-cover object-center transition-transform duration-700 hover:scale-105"
+                />
+              </div>
+            </div>
+
+            {/* Right - Content */}
+            <div className="order-2 lg:order-2 space-y-6 text-center lg:text-left">
+              <span className="inline-block text-[10px] tracking-[0.3em] uppercase text-slate-500 font-medium border-b border-slate-300 pb-1.5">
+                Premium Electronics
+              </span>
+              
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight leading-[1.1] text-slate-900">
+                Where <br />
+                <span className="font-serif italic font-normal bg-gradient-to-r from-slate-700 via-blue-600 to-slate-700 bg-clip-text text-transparent">
+                  Innovation Meets
+                </span>
+                <br />
+                <span className="font-serif italic font-normal bg-gradient-to-r from-slate-700 via-blue-600 to-slate-700 bg-clip-text text-transparent">
+                  Luxury
+                </span>
+              </h2>
+
+              <p className="text-slate-600 font-light leading-relaxed text-sm sm:text-base max-w-lg mx-auto lg:mx-0">
+                Discover cutting-edge technology wrapped in exquisite design. 
+                From premium audio to smart home innovations — redefining 
+                the future of luxury electronics.
+              </p>
+
+              <div className="pt-2">
+                <Link
+                  to="/electronics"
+                  className="inline-block px-10 py-4 bg-slate-900 text-white font-light text-xs tracking-[0.15em] uppercase hover:bg-blue-800 transition-all duration-300 hover:shadow-xl rounded-lg"
+                >
+                  Explore Electronics →
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Right - Content */}
-      <div className="order-2 lg:order-2 space-y-6 text-center lg:text-left">
-        <span className="inline-block text-[10px] tracking-[0.3em] uppercase text-slate-500 font-medium border-b border-slate-300 pb-1.5">
-          Premium Electronics
-        </span>
-        
-        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight leading-[1.1] text-slate-900">
-          Where <br />
-          <span className="font-serif italic font-normal bg-gradient-to-r from-slate-700 via-blue-600 to-slate-700 bg-clip-text text-transparent">
-            Innovation Meets
-          </span>
-          <br />
-          <span className="font-serif italic font-normal bg-gradient-to-r from-slate-700 via-blue-600 to-slate-700 bg-clip-text text-transparent">
-            Luxury
-          </span>
-        </h2>
-
-        <p className="text-slate-600 font-light leading-relaxed text-sm sm:text-base max-w-lg mx-auto lg:mx-0">
-          Discover cutting-edge technology wrapped in exquisite design. 
-          From premium audio to smart home innovations — redefining 
-          the future of luxury electronics.
-        </p>
-
-        <div className="pt-2">
-          <Link
-            to="/electronics"
-            className="inline-block px-10 py-4 bg-slate-900 text-white font-light text-xs tracking-[0.15em] uppercase hover:bg-blue-800 transition-all duration-300 hover:shadow-xl rounded-lg"
-          >
-            Explore Electronics →
-          </Link>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-      {/* ACCESSORIES SECTION - FASTER AUTOMATIC SCROLLING */}
+      {/* ============================================================ */}
+      {/* ACCESSORIES SECTION - AUTOMATIC SCROLLING */}
+      {/* ============================================================ */}
       <section className="relative py-16 bg-[#FAF7F2] overflow-hidden">
         {/* Subtle Background Elements */}
         <div className="absolute -top-24 -left-24 w-[400px] h-[400px] bg-amber-100/20 rounded-full blur-[120px] pointer-events-none" />
@@ -408,7 +397,7 @@ const HeroSection = () => {
             {/* Gradient Fade - Right */}
             <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-[#FAF7F2] to-transparent z-10 pointer-events-none" />
 
-            {/* Auto-scroll Indicator - Pulsing Dot */}
+            {/* Auto-scroll Indicator */}
             <div className="absolute top-3 right-3 z-20 flex items-center gap-2 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-md">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
@@ -464,37 +453,60 @@ const HeroSection = () => {
         </div>
       </section>
 
-    {/* BRAND LOGOS */}
-    <section className="py-16 bg-[#FAF7F2] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-
-        <div className="text-center mb-10">
-          <span className="text-[10px] tracking-[0.35em] uppercase text-amber-600">
-            Trusted Partners
-          </span>
-
-          <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-serif text-amber-950">
-            Featured{" "}
-            <span className="italic text-amber-600">
-              Maisons
+      {/* ============================================================ */}
+      {/* BRAND LOGOS SECTION */}
+      {/* ============================================================ */}
+      <section className="py-16 bg-[#FAF7F2] overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-10">
+            <span className="text-[10px] tracking-[0.35em] uppercase text-amber-600">
+              Trusted Partners
             </span>
-          </h2>
-        </div>
+            <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-serif text-amber-950">
+              Featured{" "}
+              <span className="italic text-amber-600">
+                Maisons
+              </span>
+            </h2>
+          </div>
 
-        <div className="overflow-hidden">
-          <div className="flex w-max animate-[brandScroll_25s_linear_infinite] hover:[animation-play-state:paused]">
-            {[...brands, ...brands].map(([name, url], index) => (
-              <a key={`${name}-${index}`} href={url} target="_blank" rel="noopener noreferrer" className=" w-48 sm:w-56 h-32 sm:h-36 mx-2 flex-shrink-0 flex items-center justify-center
-                  bg-white border border-[#e6ddd1] hover:-translate-y-1 hover:shadow-lg transition-all duration-300 " >
-                <span className=" font-serif text-lg sm:text-xl tracking-wider text-gray-800 group-hover:text-amber-700 ">
-                  {name}
-                </span>
-              </a>
-            ))}
+          <div className="overflow-hidden">
+            <div className="flex w-max animate-[brandScroll_25s_linear_infinite] hover:[animation-play-state:paused]">
+              {[...brands, ...brands].map(([name, url], index) => (
+                <a 
+                  key={`${name}-${index}`} 
+                  href={url} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="w-48 sm:w-56 h-32 sm:h-36 mx-2 flex-shrink-0 flex items-center justify-center bg-white border border-[#e6ddd1] hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
+                >
+                  <span className="font-serif text-lg sm:text-xl tracking-wider text-gray-800 group-hover:text-amber-700">
+                    {name}
+                  </span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* ============================================================ */}
+      {/* CSS for animations */}
+      {/* ============================================================ */}
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        
+        @keyframes brandScroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+      `}</style>
     </>
   );
 };

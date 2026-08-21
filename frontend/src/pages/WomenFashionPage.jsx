@@ -14,7 +14,13 @@ const WomenFashionPage = () => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  // Featured Editorial Showcase Items using imported images
+  const localImages = {
+    'featured-dress-01': dressImg,
+    'featured-top-02': topImg,
+    'featured-trouser-03': trouserImg,
+    'featured-anarkali-04': anarkaliImg,
+  };
+
   const localShowcase = [
     {
       _id: "featured-dress-01",
@@ -61,13 +67,18 @@ const WomenFashionPage = () => {
         const res = await client.get("/products");
         const womenProducts = res.data.filter(
           (product) =>
-            product.category?.toLowerCase() === "women" ||
-            product.category?.toLowerCase() === "women's" ||
-            product.category?.toLowerCase() === "womens",
+            product.category?.toLowerCase() === "dresses" ||
+            product.category?.toLowerCase() === "tops" ||
+            product.category?.toLowerCase() === "trousers" ||
+            product.category?.toLowerCase() === "ethnic"
         );
 
         if (womenProducts.length > 0) {
-          setProducts(womenProducts);
+          const mappedProducts = womenProducts.map(product => ({
+            ...product,
+            image: localImages[product._id] || product.image
+          }));
+          setProducts(mappedProducts);
         } else {
           setProducts(localShowcase);
         }
@@ -92,13 +103,19 @@ const WomenFashionPage = () => {
             item.category?.toLowerCase() === selectedCategory.toLowerCase(),
         );
 
+  const getProductImage = (product) => {
+    if (product._id && localImages[product._id]) {
+      return localImages[product._id];
+    }
+    return product.image || dressImg;
+  };
+
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-slate-900 font-sans">
       {/* Editorial Hero Header */}
       <section className="relative py-20 lg:py-28 bg-[#FAF7F2] text-slate-900 overflow-hidden">
         <div className="container mx-auto px-8 max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Column: Text Content */}
             <div className="lg:col-span-7 space-y-8 text-left">
               <h1 className="text-6xl sm:text-7xl xl:text-8xl font-extralight tracking-normal leading-none text-slate-900">
                 Elegance <br />
@@ -120,7 +137,6 @@ const WomenFashionPage = () => {
               </div>
             </div>
 
-            {/* Right Column: Single Portrait Card */}
             <div className="lg:col-span-5 flex justify-center lg:justify-end">
               <div className="relative w-full max-w-[380px] aspect-[4/5] rounded-3xl overflow-hidden shadow-xl border border-stone-200">
                 <img
@@ -169,28 +185,27 @@ const WomenFashionPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {filteredProducts.map((product) => {
               const productId = product._id || product.id;
-              const imageSrc = product.image || product.imageUrl || dressImg;
+              const imageSrc = getProductImage(product);
 
               return (
                 <div
                   key={productId}
                   className="group relative flex flex-col justify-between bg-white rounded-xl overflow-hidden border border-amber-900/5 shadow-sm hover:shadow-xl transition-all duration-500"
                 >
-                  {/* Image Container with Hover Overlay */}
                   <div className="relative aspect-[3/4] overflow-hidden bg-stone-100">
                     <img
                       src={imageSrc}
                       alt={product.name}
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/300x400?text=Product';
+                      }}
                     />
-
                     {product.badge && (
                       <span className="absolute top-4 left-4 bg-stone-900/90 text-amber-100 text-[9px] uppercase tracking-[0.2em] px-3 py-1 rounded-full backdrop-blur-sm">
                         {product.badge}
                       </span>
                     )}
-
-                    {/* Quick View Link Button - Links to Product Page */}
                     <div className="absolute inset-0 bg-stone-950/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-6">
                       <Link
                         to={`/product/${productId}`}
@@ -201,7 +216,6 @@ const WomenFashionPage = () => {
                     </div>
                   </div>
 
-                  {/* Product Metadata */}
                   <div className="p-5 flex flex-col flex-grow justify-between">
                     <div>
                       <span className="text-[10px] tracking-[0.15em] uppercase text-amber-800/60 font-semibold">
@@ -223,14 +237,12 @@ const WomenFashionPage = () => {
                     </div>
 
                     <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                      {/* ✅ PRICE IS NOW CLICKABLE */}
                       <Link
                         to={`/product/${productId}`}
                         className="text-sm font-medium text-slate-900 hover:text-amber-800 transition-colors"
                       >
                         ${product.price ? product.price : "250"}
                       </Link>
-                      {/* ✅ VIEW BUTTON - Links to Product Page */}
                       <Link
                         to={`/product/${productId}`}
                         className="text-xs font-light tracking-wide text-amber-800 hover:text-amber-950 flex items-center gap-1 transition-all hover:underline"

@@ -10,8 +10,14 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import SuperAdmin from './pages/SuperAdmin'
 import WomenFashionPage from './pages/WomenFashionPage';
+import MenFashionPage from './pages/MenFashionPage';
 import About from "./pages/About";
-import Electronics from './pages/Electronics'
+import Electronics from './pages/Electronics';
+import SunglassesPage from './pages/SunglassesPage';
+import BagsPage from './pages/BagsPage';
+import JewelryPage from './pages/JewelryPage';
+import WatchesPage from './pages/WatchesPage';
+import FootwearPage from './pages/FootwearPage';
 
 export default function App() {
   return (
@@ -28,8 +34,14 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<SuperAdmin />} />
           <Route path="/WomenFashionPage" element={<WomenFashionPage />} />
+          <Route path="/MenFashionPage" element={<MenFashionPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/electronics" element={<Electronics />} />
+          <Route path="/SunglassesPage" element={<SunglassesPage />} />
+          <Route path="/BagsPage" element={<BagsPage />} />
+          <Route path="/JewelryPage" element={<JewelryPage />} />
+          <Route path="/WatchesPage" element={<WatchesPage />} />
+          <Route path="/FootwearPage" element={<FootwearPage />} />
         </Routes>
       </main>
     </div>
